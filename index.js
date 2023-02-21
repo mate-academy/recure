@@ -1,7 +1,8 @@
 import FingerprintJS from '@fingerprintjs/fingerprintjs-pro'
+import { apiKeyUrl, eventHandlerUrl } from './config/config'
 
 async function getApiKey (url, projectApiKey) {
-  let response = await fetch(url, {
+  const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -9,31 +10,43 @@ async function getApiKey (url, projectApiKey) {
           'x-api-key': projectApiKey
       },
   });
+
   const data = await response.json();
+
   return data.apiKey;
 }
 
 async function recure(userId, projectApiKey, eventType) {
-  const recureApiKey = await getApiKey("https://api.dev.recure.ai/api/event_handler/get_api_key/", projectApiKey)
+  const recureApiKey = await getApiKey(apiKeyUrl, projectApiKey)
   const fpPromise = FingerprintJS.load({ apiKey: recureApiKey })
   fpPromise
   .then(fp => fp.get())
   .then(result => {
+      const timestamp = new Date().toISOString();
       const xApiKey = projectApiKey;
-      result.provider = 'fingerprint';
-      result.userId = userId.toString();
-      result.type = eventType 
-      fetch('https://api.dev.recure.ai/api/event_handler/', {
+      
+      const data = {
+        'userId': userId.toString(),
+        'provider': 'fingerprint',
+        'eventType': eventType,
+        'visitorId': result.visitorId,
+        'visitorFound': result.visitorFound,
+        'confidence': result.confidence,
+        'timestamp': timestamp
+
+      };
+
+      await fetch(eventHandlerUrl, {
       method: 'POST',
       headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
           'x-api-key': xApiKey
       },
-      body: JSON.stringify(result)
+      body: JSON.stringify(data)
       })
   })
   .catch(error => console.error(error))
 }
 
-module.exports = recure
+module.exports = recure;
