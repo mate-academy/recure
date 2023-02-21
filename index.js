@@ -13,8 +13,8 @@ async function getApiKey (url, projectApiKey) {
   return data.apiKey;
 }
 
-function recure(userId, projectApiKey, eventType) {
-  const recureApiKey = getApiKey("https://api.dev.recure.ai/api/event_handler/get_api_key/", projectApiKey)
+async function recure(userId, projectApiKey, eventType) {
+  const recureApiKey = await getApiKey("https://api.dev.recure.ai/api/event_handler/get_api_key/", projectApiKey)
   const fpPromise = FingerprintJS.load({ apiKey: recureApiKey })
   fpPromise
   .then(fp => fp.get())
