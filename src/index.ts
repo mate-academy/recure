@@ -1,7 +1,13 @@
 "use strict";
 import FingerprintJS from "@fingerprintjs/fingerprintjs-pro";
-import { apiKeyUrl, eventHandlerUrl } from "../config/config";
-import { EventType } from "../event/eventType";
+
+export const apiKeyUrl: string = 'https://api.dev.recure.ai/api/event_handler/get_api_key/';
+export const eventHandlerUrl: string = 'https://api.dev.recure.ai/api/event_handler/';
+
+export enum EventType {
+  LOG_IN = 'login',
+  SIGN_UP = 'signup',
+}
 
 export type Payload = {
   userId: string;
