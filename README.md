@@ -4,7 +4,7 @@
 
 First, run `npm install recure` for your app.
 
-Then, in an Express app:
+Then, in your app put the code:
 
 ```typescript
 import { recure } from 'recure/lib'
