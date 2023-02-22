@@ -13,7 +13,7 @@ type Payload = {
   timestamp: string
 }
 
-type Response = {
+type KeyResponse = {
     apiKey: string,
 }
 
@@ -27,7 +27,7 @@ async function getApiKey (url: string, projectApiKey: string): Promise<string> {
     },
   });
 
-  const data: Response = await response.json();
+  const data: KeyResponse = await response.json();
 
   return data.apiKey;
 }
