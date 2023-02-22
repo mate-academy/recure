@@ -3,7 +3,7 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs-pro'
 import { apiKeyUrl, eventHandlerUrl } from './config/config'
 import { EventType } from './event/eventType';
 
-type Payload = {
+export type Payload = {
   userId: string,
   provider: string,
   type: EventType,
@@ -13,11 +13,11 @@ type Payload = {
   timestamp: string
 }
 
-type KeyResponse = {
+export type KeyResponse = {
   apiKey: string,
 }
 
-async function getApiKey (url: string, projectApiKey: string): Promise<string> {
+export async function getApiKey (url: string, projectApiKey: string): Promise<string> {
   const response = await fetch(url, {
     method: 'GET',
     headers: {
@@ -32,7 +32,7 @@ async function getApiKey (url: string, projectApiKey: string): Promise<string> {
   return data.apiKey;
 }
 
-async function recure(userId: number | string, projectApiKey: string, eventType: EventType): Promise<any> {
+export async function recure(userId: number | string, projectApiKey: string, eventType: EventType): Promise<any> {
   const recureApiKey: string = await getApiKey(apiKeyUrl, projectApiKey);
   const fp: any = await FingerprintJS.load({ apiKey: recureApiKey })
 
