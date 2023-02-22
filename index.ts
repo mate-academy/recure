@@ -55,13 +55,13 @@ async function recure(userId: number | string, projectApiKey: string, eventType:
     };
 
     await fetch(eventHandlerUrl, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'x-api-key': xApiKey
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'x-api-key': xApiKey
       },
-    body: JSON.stringify(payload),
+      body: JSON.stringify(payload),
     })
 
   } catch (error) {
