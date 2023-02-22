@@ -1,0 +1,28 @@
+{
+  "name": "recure",
+  "version": "1.0.0",
+  "description": "Recure tracking",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mate-academy/recure.git"
+  },
+  "keywords": [
+    "recure"
+  ],
+  "author": "recure.ai <alex.z@mate.academy> (https://recure.ai/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mate-academy/recure/issues"
+  },
+  "homepage": "https://github.com/mate-academy/recure#readme",
+  "dependencies": {
+    "@fingerprintjs/fingerprintjs-pro": "^3.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.14.0"
+  }
+}
