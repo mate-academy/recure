@@ -22,14 +22,14 @@ async function recure(userId, projectApiKey, eventType) {
   try {
     await fpPromise
       .then(fp => fp.get())
-      .then(result => {
+      .then(async (result) => {
         const timestamp = new Date().toISOString();
         const xApiKey = projectApiKey;
         
         const data = {
           'userId': userId.toString(),
           'provider': 'fingerprint',
-          'eventType': eventType,
+          'type': eventType,
           'visitorId': result.visitorId,
           'visitorFound': result.visitorFound,
           'confidence': result.confidence,
