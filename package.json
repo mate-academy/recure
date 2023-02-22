@@ -1,6 +1,6 @@
 {
   "name": "recure",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Recure tracking",
   "main": "src/index.ts",
   "types": "lib/index.d.ts",
