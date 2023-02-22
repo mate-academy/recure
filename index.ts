@@ -14,7 +14,7 @@ type Payload = {
 }
 
 type KeyResponse = {
-    apiKey: string,
+  apiKey: string,
 }
 
 async function getApiKey (url: string, projectApiKey: string): Promise<string> {
