@@ -1,6 +1,6 @@
 {
   "name": "recure",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Recure tracking",
   "main": "src/index.ts",
   "types": "lib/index.d.ts",
@@ -9,7 +9,7 @@
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json",
-    "prepare" : "npm run build"
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -34,5 +34,7 @@
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^4.9.5"
   },
-  "files": ["lib/**/*"]
+  "files": [
+    "lib/**/*"
+  ]
 }
