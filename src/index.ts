@@ -4,14 +4,25 @@ import FingerprintJS from "@fingerprintjs/fingerprintjs-pro";
 export const apiKeyUrl: string = 'https://api.recure.ai/api/event_handler/get_api_key/';
 export const eventHandlerUrl: string = 'https://api.recure.ai/api/event_handler/';
 
+export enum EventType {
+  LOGIN = 'LOGIN',
+  SIGN_UP = 'SIGN_UP',
+  PAGE = 'PAGE',
+  FREE_TRIAL_STARTED = 'FREE_TRIAL_STARTED',
+  FREE_TRIAL_ENDED = 'FREE_TRIAL_ENDED',
+  SUBSCRIPTION_STARTED = 'SUBSCRIPTION_STARTED',
+  SUBSCRIPTION_ENDED = 'SUBSCRIPTION_ENDED'
+}
+
 export type Payload = {
   userId: string;
   provider: string;
-  type: string;
+  type: EventType;
   visitorId: string;
   visitorFound: boolean;
   confidence: object;
   timestamp: string;
+  eventName?: string | undefined;
 };
 
 export type KeyResponse = {
@@ -39,7 +50,8 @@ export async function getApiKey(
 export async function recure(
   userId: number | string,
   projectApiKey: string,
-  eventType: string
+  eventType: EventType,
+  eventName?: string | undefined
 ): Promise<any> {
   const recureApiKey: string = await getApiKey(apiKeyUrl, projectApiKey);
   const fp: any = await FingerprintJS.load({ apiKey: recureApiKey });
@@ -56,6 +68,7 @@ export async function recure(
       visitorFound: result.visitorFound,
       confidence: result.confidence,
       timestamp: new Date().toISOString(),
+      eventName: eventName || "",
     };
 
     await fetch(eventHandlerUrl, {
