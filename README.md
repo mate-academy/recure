@@ -10,7 +10,7 @@ Then, in your app put the code:
 import { recure, EventType } from 'recure/web'
 
 // Put this code after successful submitted form sign_up/login, 4-th parameter is optional and uses only with EventType.PAGE
-await recure("userId", "your-project-api-key", EventType.NameOfEvent, "subcription-page");
+await recure("userId", "your-project-api-key", EventType.NameOfEvent, "subscription-page");
 ```
 
 Possible events in `EventType`:
