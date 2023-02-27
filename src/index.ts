@@ -22,6 +22,7 @@ export type Payload = {
   visitorFound: boolean;
   confidence: object;
   timestamp: string;
+  eventName?: string | undefined;
 };
 
 export type KeyResponse = {
@@ -49,7 +50,8 @@ export async function getApiKey(
 export async function recure(
   userId: number | string,
   projectApiKey: string,
-  eventType: EventType
+  eventType: EventType,
+  eventName?: string | undefined
 ): Promise<any> {
   const recureApiKey: string = await getApiKey(apiKeyUrl, projectApiKey);
   const fp: any = await FingerprintJS.load({ apiKey: recureApiKey });
@@ -66,6 +68,7 @@ export async function recure(
       visitorFound: result.visitorFound,
       confidence: result.confidence,
       timestamp: new Date().toISOString(),
+      eventName: eventName || "",
     };
 
     await fetch(eventHandlerUrl, {
