@@ -3,7 +3,7 @@ import FingerprintJS from "@fingerprintjs/fingerprintjs-pro";
 
 const apiKeyUrl: string = 'https://api.recure.ai/api/event_handler/get_api_key/';
 const eventHandlerUrl: string = 'https://api.recure.ai/api/event_handler/';
-const expiresDate: number = 60;
+const daysToExpire: number = 60;
 
 export enum EventType {
   LOGIN = 'LOGIN',
@@ -77,7 +77,7 @@ async function getOrSetVisitorId(cookieName: string, recureApiKey: string): Prom
 
   const result: any = await getFingerPrintResult(recureApiKey);
 
-  setCookie(cookieName, result.visitorId, expiresDate);
+  setCookie(cookieName, result.visitorId, daysToExpire);
 
   return result.visitorId;
 }
@@ -85,7 +85,7 @@ async function getOrSetVisitorId(cookieName: string, recureApiKey: string): Prom
 async function getFingerPrintResult(recureApiKey: string): Promise<any> {
     const fp: any = await FingerprintJS.load({ apiKey: recureApiKey });
 
-    return await fp.get()
+    return await fp.get();
 }
 
 async function getPayload(
@@ -116,7 +116,7 @@ export async function recure(
   const recureApiKey: string = await getApiKey(apiKeyUrl, projectApiKey);
 
   try {
-    const payload: Payload = await getPayload(recureApiKey, userId, eventType, eventName)
+    const payload: Payload = await getPayload(recureApiKey, userId, eventType, eventName);
 
     await fetch(eventHandlerUrl, {
       method: "POST",
