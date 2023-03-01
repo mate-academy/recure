@@ -1,5 +1,6 @@
 "use strict";
 import FingerprintJS from "@fingerprintjs/fingerprintjs-pro";
+import * as Cookies from 'js-cookie';
 
 const apiKeyUrl: string = 'https://api.recure.ai/api/event_handler/get_api_key/';
 const eventHandlerUrl: string = 'https://api.recure.ai/api/event_handler/';
@@ -46,38 +47,16 @@ async function getApiKey(
   return data.apiKey;
 }
 
-function setCookie(cookieName: string, cookieValue: string, exdays: number) {
-  const date = new Date();
-  date.setTime(date.getTime() + (exdays*24*60*60*1000));
-  const expires: string = "expires="+ date.toUTCString();
-  document.cookie = `${cookieName}=${cookieValue};${expires};path=/`;
-}
-
-function getCookie(cookieName: string): string {
-  const name: string = cookieName + "=";
-  const decodedCookie: string = decodeURIComponent(document.cookie);
-
-  const cookiesParts: string[] = decodedCookie.split(`; ${name}`);
-
-  if (cookiesParts.length === 1) {
-    return "";
-  }
-
-  const visitorId: string | undefined = cookiesParts.pop()?.split(";")[0];
-
-  return visitorId || "";
-}
-
 async function getOrSetVisitorId(cookieName: string, recureApiKey: string): Promise<string> {
-  const visitorId: string = getCookie(cookieName);
+  const visitorId: string | undefined = Cookies.get(cookieName);
 
-  if (visitorId !== "") {
+  if (visitorId !== "" && visitorId !== undefined) {
     return visitorId;
   }
 
   const result: any = await getFingerPrintResult(recureApiKey);
 
-  setCookie(cookieName, result.visitorId, daysToExpire);
+  Cookies.set(cookieName, result.visitorId, { expires: daysToExpire, path: '' });
 
   return result.visitorId;
 }
