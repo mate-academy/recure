@@ -88,7 +88,7 @@ async function getPayload(
 }
 
 function isReadyToSend(): boolean {
-  const readyToSend: string | undefined = Cookies.get("readyToSend");
+  const readyToSend: string | undefined = Cookies.get("recureReadyToSendEvent");
 
   if (readyToSend === undefined) {
     const inFiveMinutes: Date = new Date(new Date().getTime() + minutesToExpire * 60 * 1000);
