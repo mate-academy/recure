@@ -92,7 +92,7 @@ function isReadyToSend(): boolean {
 
   if (readyToSend === undefined) {
     const inFiveMinutes: Date = new Date(new Date().getTime() + minutesToExpire * 60 * 1000);
-    Cookies.set("readyToSend", "false", { expires: inFiveMinutes, path: "" });
+    Cookies.set("recureReadyToSendEvent", "false", { expires: inFiveMinutes, path: "" });
 
     return true
   }
