@@ -29,3 +29,5 @@ import { recure, EventType } from 'recure/web'
 
 await recure("userId", "your-project-api-key", EventType.PAGE, "eventName");
 ```
+
+**Also, if you use the `PAGE` event, recure will receive it no more than once in 5 minutes.**

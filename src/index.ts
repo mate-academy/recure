@@ -1,19 +1,20 @@
 "use strict";
 import FingerprintJS from "@fingerprintjs/fingerprintjs-pro";
-import * as Cookies from 'js-cookie';
+import * as Cookies from "js-cookie";
 
-const apiKeyUrl: string = 'https://api.recure.ai/api/event_handler/get_api_key/';
-const eventHandlerUrl: string = 'https://api.recure.ai/api/event_handler/';
+const apiKeyUrl: string = "https://api.recure.ai/api/event_handler/get_api_key/";
+const eventHandlerUrl: string = "https://api.recure.ai/api/event_handler/";
 const daysToExpire: number = 60;
+const minutesToExpire: number = 5;
 
 export enum EventType {
-  LOGIN = 'LOGIN',
-  SIGN_UP = 'SIGN_UP',
-  PAGE = 'PAGE',
-  FREE_TRIAL_STARTED = 'FREE_TRIAL_STARTED',
-  FREE_TRIAL_ENDED = 'FREE_TRIAL_ENDED',
-  SUBSCRIPTION_STARTED = 'SUBSCRIPTION_STARTED',
-  SUBSCRIPTION_ENDED = 'SUBSCRIPTION_ENDED'
+  LOGIN = "LOGIN",
+  SIGN_UP = "SIGN_UP",
+  PAGE = "PAGE",
+  FREE_TRIAL_STARTED = "FREE_TRIAL_STARTED",
+  FREE_TRIAL_ENDED = "FREE_TRIAL_ENDED",
+  SUBSCRIPTION_STARTED = "SUBSCRIPTION_STARTED",
+  SUBSCRIPTION_ENDED = "SUBSCRIPTION_ENDED"
 }
 
 type Payload = {
@@ -56,7 +57,7 @@ async function getOrSetVisitorId(cookieName: string, recureApiKey: string): Prom
 
   const result: any = await getFingerPrintResult(recureApiKey);
 
-  Cookies.set(cookieName, result.visitorId, { expires: daysToExpire, path: '' });
+  Cookies.set(cookieName, result.visitorId, { expires: daysToExpire, path: "" });
 
   return result.visitorId;
 }
@@ -86,12 +87,30 @@ async function getPayload(
   };
 }
 
+function isReadyToSend(): boolean {
+  const readyToSend: string | undefined = Cookies.get("readyToSend");
+
+  if (readyToSend === undefined) {
+    const inFiveMinutes: Date = new Date(new Date().getTime() + minutesToExpire * 60 * 1000);
+    Cookies.set("recureReadyToSendEvent", "false", { expires: inFiveMinutes, path: "" });
+
+    return true
+  }
+
+  return false
+}
+
 export async function recure(
   userId: number | string,
   projectApiKey: string,
   eventType: EventType,
   eventName?: string | undefined
 ): Promise<any> {
+
+  if (eventName === EventType.PAGE && !isReadyToSend()) {
+      return;
+  }
+
   const recureApiKey: string = await getApiKey(apiKeyUrl, projectApiKey);
 
   try {
