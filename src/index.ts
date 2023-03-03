@@ -88,11 +88,11 @@ async function getPayload(
 }
 
 function isReadyToSend(): boolean {
-  const readyToSend: string | undefined = Cookies.get("recureReadyToSendEvent");
+  const readyToSend: string | undefined = Cookies.get("recureSendingEventsBlocked");
 
   if (readyToSend === undefined) {
     const inFiveMinutes: Date = new Date(new Date().getTime() + minutesToExpire * 60 * 1000);
-    Cookies.set("recureReadyToSendEvent", "false", { expires: inFiveMinutes, path: "" });
+    Cookies.set("recureSendingEventsBlocked", "false", { expires: inFiveMinutes, path: "" });
 
     return true
   }
