@@ -6,6 +6,7 @@ const apiKeyUrl: string = "https://api.recure.ai/api/event_handler/get_api_key/"
 const eventHandlerUrl: string = "https://api.recure.ai/api/event_handler/";
 const daysToExpire: number = 60;
 const minutesToExpire: number = 5;
+const sendingEventsBlocked = "recureSendingEventsBlocked"
 
 export enum EventType {
   LOGIN = "LOGIN",
@@ -17,13 +18,17 @@ export enum EventType {
   SUBSCRIPTION_ENDED = "SUBSCRIPTION_ENDED"
 }
 
+type EventOptions = {
+  pageName: string;
+} | undefined;
+
 type Payload = {
   userId: string;
   provider: string;
   type: EventType;
   visitorId: string;
   timestamp: string;
-  eventName?: string | undefined;
+  eventOptions?: EventOptions;
 };
 
 type KeyResponse = {
@@ -72,7 +77,7 @@ async function getPayload(
   recureApiKey: string,
   userId: number | string,
   eventType: EventType,
-  eventName?: string | undefined
+  eventOptions?: EventOptions
 ): Promise<Payload> {
 
   const visitorId = await getOrSetVisitorId("visitorId", recureApiKey)
@@ -83,16 +88,16 @@ async function getPayload(
     type: eventType,
     visitorId,
     timestamp: new Date().toISOString(),
-    eventName: eventName || "",
+    eventOptions,
   };
 }
 
 function isReadyToSend(): boolean {
-  const readyToSend: string | undefined = Cookies.get("recureReadyToSendEvent");
+  const readyToSend: string | undefined = Cookies.get(sendingEventsBlocked);
 
   if (readyToSend === undefined) {
     const inFiveMinutes: Date = new Date(new Date().getTime() + minutesToExpire * 60 * 1000);
-    Cookies.set("recureReadyToSendEvent", "false", { expires: inFiveMinutes, path: "" });
+    Cookies.set(sendingEventsBlocked, "false", { expires: inFiveMinutes, path: "" });
 
     return true
   }
@@ -104,17 +109,17 @@ export async function recure(
   userId: number | string,
   projectApiKey: string,
   eventType: EventType,
-  eventName?: string | undefined
+  eventOptions?: EventOptions
 ): Promise<any> {
 
-  if (eventName === EventType.PAGE && !isReadyToSend()) {
+  if (eventType === EventType.PAGE && !isReadyToSend()) {
       return;
   }
 
   const recureApiKey: string = await getApiKey(apiKeyUrl, projectApiKey);
 
   try {
-    const payload: Payload = await getPayload(recureApiKey, userId, eventType, eventName);
+    const payload: Payload = await getPayload(recureApiKey, userId, eventType, eventOptions);
 
     await fetch(eventHandlerUrl, {
       method: "POST",
