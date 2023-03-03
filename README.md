@@ -22,12 +22,12 @@ Possible events in `EventType`:
 * SUBSCRIPTION_STARTED
 * SUBSCRIPTION_ENDED
 
-**Note:** If you use the `PAGE` event, you also should put `eventName` as a 4-th parameter of the function.
+**Note:** If you use the `PAGE` event, you also should put `eventOption` as a 4-th parameter of the function.
 
 ```typescript
 import { recure, EventType } from 'recure/web'
 
-await recure("userId", "your-project-api-key", EventType.PAGE, "eventName");
+await recure("userId", "your-project-api-key", EventType.PAGE, {pageName: "pageName"});
 ```
 
 **Also, if you use the `PAGE` event, recure will receive it no more than once in 5 minutes.**

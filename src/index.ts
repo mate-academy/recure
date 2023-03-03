@@ -6,6 +6,7 @@ const apiKeyUrl: string = "https://api.recure.ai/api/event_handler/get_api_key/"
 const eventHandlerUrl: string = "https://api.recure.ai/api/event_handler/";
 const daysToExpire: number = 60;
 const minutesToExpire: number = 5;
+const sendingEventsBlocked = "recureSendingEventsBlocked"
 
 export enum EventType {
   LOGIN = "LOGIN",
@@ -92,11 +93,11 @@ async function getPayload(
 }
 
 function isReadyToSend(): boolean {
-  const readyToSend: string | undefined = Cookies.get("recureSendingEventsBlocked");
+  const readyToSend: string | undefined = Cookies.get(sendingEventsBlocked);
 
   if (readyToSend === undefined) {
     const inFiveMinutes: Date = new Date(new Date().getTime() + minutesToExpire * 60 * 1000);
-    Cookies.set("recureSendingEventsBlocked", "false", { expires: inFiveMinutes, path: "" });
+    Cookies.set(sendingEventsBlocked, "false", { expires: inFiveMinutes, path: "" });
 
     return true
   }
