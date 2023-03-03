@@ -18,7 +18,7 @@ export enum EventType {
 }
 
 type EventOptions = {
-  eventPage: string;
+  pageName: string;
 } | undefined;
 
 type Payload = {
