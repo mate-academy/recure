@@ -17,13 +17,17 @@ export enum EventType {
   SUBSCRIPTION_ENDED = "SUBSCRIPTION_ENDED"
 }
 
+type EventOptions = {
+  eventPage: string;
+} | undefined;
+
 type Payload = {
   userId: string;
   provider: string;
   type: EventType;
   visitorId: string;
   timestamp: string;
-  eventName?: string | undefined;
+  eventOptions?: EventOptions;
 };
 
 type KeyResponse = {
@@ -72,7 +76,7 @@ async function getPayload(
   recureApiKey: string,
   userId: number | string,
   eventType: EventType,
-  eventName?: string | undefined
+  eventOptions?: EventOptions
 ): Promise<Payload> {
 
   const visitorId = await getOrSetVisitorId("visitorId", recureApiKey)
@@ -83,7 +87,7 @@ async function getPayload(
     type: eventType,
     visitorId,
     timestamp: new Date().toISOString(),
-    eventName: eventName || "",
+    eventOptions,
   };
 }
 
@@ -104,7 +108,7 @@ export async function recure(
   userId: number | string,
   projectApiKey: string,
   eventType: EventType,
-  eventName?: string | undefined
+  eventOptions?: EventOptions
 ): Promise<any> {
 
   if (eventType === EventType.PAGE && !isReadyToSend()) {
@@ -114,7 +118,7 @@ export async function recure(
   const recureApiKey: string = await getApiKey(apiKeyUrl, projectApiKey);
 
   try {
-    const payload: Payload = await getPayload(recureApiKey, userId, eventType, eventName);
+    const payload: Payload = await getPayload(recureApiKey, userId, eventType, eventOptions);
 
     await fetch(eventHandlerUrl, {
       method: "POST",
