@@ -107,7 +107,7 @@ export async function recure(
   eventName?: string | undefined
 ): Promise<any> {
 
-  if (eventName === EventType.PAGE && !isReadyToSend()) {
+  if (eventType === EventType.PAGE && !isReadyToSend()) {
       return;
   }
 
