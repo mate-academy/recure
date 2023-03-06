@@ -1,4 +1,5 @@
 "use strict";
+// @ts-ignore
 import FingerprintJS from "@fingerprintjs/fingerprintjs-pro";
 import * as Cookies from "js-cookie";
 
@@ -18,7 +19,7 @@ export enum EventType {
   SUBSCRIPTION_ENDED = "SUBSCRIPTION_ENDED"
 }
 
-type EventOptions = {
+export type EventOptions = {
   pageName: string;
 } | undefined;
 
