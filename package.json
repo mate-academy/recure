@@ -1,6 +1,6 @@
 {
   "name": "recure",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "description": "Recure tracking",
   "main": "src/index.ts",
   "types": "web/index.d.ts",
