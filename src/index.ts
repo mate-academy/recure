@@ -52,13 +52,14 @@ async function getApiKey(url: string, projectApiKey: string): Promise<string> {
   return data.apiKey;
 }
 
-async function getOrSetVisitorId(cookieName: string, recureApiKey: string): Promise<string> {
+async function getOrSetVisitorId(cookieName: string, projectApiKey: string): Promise<string> {
   const visitorId: string | undefined = Cookies.get(cookieName);
 
   if (visitorId !== '' && visitorId !== undefined) {
     return visitorId;
   }
 
+  const recureApiKey: string = await getApiKey(apiKeyUrl, projectApiKey);
   const result: any = await getFingerPrintResult(recureApiKey);
 
   Cookies.set(cookieName, result.visitorId, { expires: daysToExpire, path: '' });
@@ -73,12 +74,12 @@ async function getFingerPrintResult(recureApiKey: string): Promise<any> {
 }
 
 async function getPayload(
-  recureApiKey: string,
+  projectApiKey: string,
   userId: number | string,
   eventType: EventType,
   eventOptions?: EventOptions,
 ): Promise<Payload> {
-  const visitorId = await getOrSetVisitorId('visitorId', recureApiKey);
+  const visitorId = await getOrSetVisitorId('visitorId', projectApiKey);
 
   return {
     userId: userId.toString(),
@@ -113,10 +114,8 @@ export async function recure(
     return;
   }
 
-  const recureApiKey: string = await getApiKey(apiKeyUrl, projectApiKey);
-
   try {
-    const payload: Payload = await getPayload(recureApiKey, userId, eventType, eventOptions);
+    const payload: Payload = await getPayload(projectApiKey, userId, eventType, eventOptions);
 
     await fetch(eventHandlerUrl, {
       method: 'POST',
