@@ -6,6 +6,6 @@
     "outDir": "./web",
     "strict": true
   },
-  "include": ["src"],
+  "include": ["src", "dist"],
   "exclude": ["node_modules", "**/__tests__/*"]
 }
