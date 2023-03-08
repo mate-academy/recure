@@ -1,6 +1,6 @@
 # recure.ai
 
-Recure AI helps companies increase their revenue by detecting account sharers and free trial abusers and converting them into paying customers
+Recure AI helps companies increase their revenue by detecting account sharers and free trial abusers and converting them into paying customers.
 
 ## Quick start
 
